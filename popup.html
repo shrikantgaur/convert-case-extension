@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convert Case</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="message-container"></div>
+  <div class="container">
+    <h1>Convert Case</h1>
+    
+    <div class="input-group">
+      <label for="inputText">Your Text</label>
+      <textarea id="inputText" placeholder="Type or paste your text here..."></textarea>
+      <div class="input-actions">
+        <button id="clearBtn">Clear</button>
+        <button id="pasteBtn">Paste from clipboard</button>
+      </div>
+    </div>
+    
+    <div class="conversion-types">
+      <label>Convert To</label>
+      <div class="button-grid" id="conversionButtons">
+      </div>
+    </div>
+    
+    <div class="output-group">
+      <label for="outputText">Converted Text</label>
+      <textarea id="outputText" readonly placeholder="Your converted text will appear here..."></textarea>
+      <div class="output-actions">
+        <button id="copyBtn" disabled>Copy to clipboard</button>
+      </div>
+    </div>
+    
+    <div class="footer">
+      Convert text between different case styles with ease
+    </div>
+  </div>
+  
+  <script src="js/caseConverter.js"></script>
+  <script src="js/popup.js"></script>
+</body>
+</html>
