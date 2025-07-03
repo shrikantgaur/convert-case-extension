@@ -9,7 +9,22 @@
 <body>
   <div id="message-container"></div>
   <div class="container">
-    <h1>Convert Case</h1>
+    <div class="header">
+      <h1>Convert Case</h1>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <path d="M12 1v2"></path>
+          <path d="M12 21v2"></path>
+          <path d="M4.22 4.22l1.42 1.42"></path>
+          <path d="M18.36 18.36l1.42 1.42"></path>
+          <path d="M1 12h2"></path>
+          <path d="M21 12h2"></path>
+          <path d="M4.22 19.78l1.42-1.42"></path>
+          <path d="M18.36 5.64l1.42-1.42"></path>
+        </svg>
+      </button>
+    </div>
     
     <div class="input-group">
       <label for="inputText">Your Text</label>
@@ -20,9 +35,29 @@
       </div>
     </div>
     
+    <div class="stats-container" id="statsContainer">
+      <div class="stat-item">
+        <span>Character Count:</span>
+        <span class="stat-value" id="charCount">0</span>
+      </div>
+      <div class="stat-item">
+        <span>Word Count:</span>
+        <span class="stat-value" id="wordCount">0</span>
+      </div>
+      <div class="stat-item">
+        <span>Sentence Count:</span>
+        <span class="stat-value" id="sentenceCount">0</span>
+      </div>
+      <div class="stat-item">
+        <span>Line Count:</span>
+        <span class="stat-value" id="lineCount">0</span>
+      </div>
+    </div>
+    
     <div class="conversion-types">
       <label>Convert To</label>
       <div class="button-grid" id="conversionButtons">
+        <!-- Buttons will be added dynamically -->
       </div>
     </div>
     

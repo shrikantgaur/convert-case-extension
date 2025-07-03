@@ -8,18 +8,20 @@
   --button-hover: #d1d5db;
   --disabled-bg: #f3f4f6;
   --disabled-text: #9ca3af;
+  --stats-bg: #edf2f7;
+  --stats-text: #4a5568;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-color: #111827;
-    --text-color: #f9fafb;
-    --border-color: #374151;
-    --button-bg: #1f2937;
-    --button-hover: #374151;
-    --disabled-bg: #1f2937;
-    --disabled-text: #6b7280;
-  }
+[data-theme="dark"] {
+  --bg-color: #111827;
+  --text-color: #f9fafb;
+  --border-color: #374151;
+  --button-bg: #1f2937;
+  --button-hover: #374151;
+  --disabled-bg: #1f2937;
+  --disabled-text: #6b7280;
+  --stats-bg: #1f2937;
+  --stats-text: #d1d5db;
 }
 
 * {
@@ -42,11 +44,28 @@ body {
   gap: 1rem;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 h1 {
   font-size: 1.5rem;
   font-weight: 600;
-  text-align: center;
   margin-bottom: 0.5rem;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.theme-toggle:hover {
+  background-color: var(--button-hover);
 }
 
 label {
@@ -149,7 +168,6 @@ button {
   100% { opacity: 0; }
 }
 
-/* Ensure buttons fill their grid cells */
 .button-grid button {
   width: 100%;
 }
@@ -159,5 +177,27 @@ button {
   color: var(--disabled-text);
   text-align: center;
   margin-top: 0.5rem;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background-color: var(--stats-bg);
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.stat-item {
+  font-size: 0.75rem;
+  color: var(--stats-text);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stat-value {
+  font-weight: 600;
 }
 
