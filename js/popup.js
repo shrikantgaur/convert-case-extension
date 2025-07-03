@@ -10,8 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const wordCount = document.getElementById('wordCount');
   const sentenceCount = document.getElementById('sentenceCount');
   const lineCount = document.getElementById('lineCount');
-  
-  chrome.storage.local.get(['inputText', 'activeConversion', 'theme'], (result) => {
+  const historyItems = document.getElementById('historyItems');
+  const clearHistoryBtn = document.getElementById('clearHistory');
+  const exportTxtBtn = document.getElementById('exportTxt');
+  const exportJsonBtn = document.getElementById('exportJson');
+
+  let conversionHistory = [];
+
+  chrome.storage.local.get(['inputText', 'activeConversion', 'theme', 'conversionHistory'], (result) => {
+
+    if (result.conversionHistory) {
+      conversionHistory = result.conversionHistory;
+    }
+
     if (result.inputText) {
       inputText.value = result.inputText;
       updateStats(result.inputText);
@@ -25,26 +36,153 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.button-grid button').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.method === activeMethod);
     });
+
+    renderConversionButtons(activeMethod);
+
+    renderHistory();
+
   });
-  
-  Object.keys(conversionMethods).forEach(method => {
-    const button = document.createElement('button');
-    button.textContent = method;
-    button.dataset.method = method;
+
+  function renderConversionButtons(activeMethod) {
+    conversionButtons.innerHTML = '';
     
-    button.addEventListener('click', () => {
-      document.querySelectorAll('.button-grid button').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      button.classList.add('active');
+    Object.keys(conversionMethods).forEach(method => {
+      const button = document.createElement('button');
+      button.textContent = method;
+      button.dataset.method = method;
       
-      convertText(method);
-      chrome.storage.local.set({ activeConversion: method });
+      if (method === activeMethod) {
+        button.classList.add('active');
+      }
+      
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.button-grid button').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        button.classList.add('active');
+        
+        convertText(method);
+        chrome.storage.local.set({ activeConversion: method });
+      });
+      
+      conversionButtons.appendChild(button);
     });
+  }
+
+  function renderHistory() {
+    historyItems.innerHTML = '';
     
-    conversionButtons.appendChild(button);
+    if (!conversionHistory || conversionHistory.length === 0) {
+      historyItems.innerHTML = '<div class="history-empty">No conversions yet</div>';
+      return;
+    }
+    
+    conversionHistory.forEach((item) => {
+      if (!item || !item.method || !item.converted) return;
+      
+      const historyItem = document.createElement('div');
+      historyItem.className = 'history-item';
+      historyItem.innerHTML = `
+        <span class="history-method">${item.method}</span>
+        <span class="history-text" title="${item.converted.replace(/"/g, '&quot;')}">
+          ${item.converted.length > 50 ? item.converted.substring(0, 50) + '...' : item.converted}
+        </span>
+      `;
+      
+      historyItem.addEventListener('click', () => {
+        inputText.value = item.original || '';
+        outputText.value = item.converted;
+        updateStats(item.original || '');
+        copyBtn.disabled = false;
+        
+        document.querySelectorAll('.button-grid button').forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.method === item.method) {
+            btn.classList.add('active');
+            chrome.storage.local.set({ activeConversion: item.method });
+          }
+        });
+        
+        const hasText = item.converted.trim().length > 0;
+        exportTxtBtn.disabled = !hasText;
+        exportJsonBtn.disabled = !hasText;
+      });
+      
+      historyItems.appendChild(historyItem);
+    });
+  }
+
+  clearHistoryBtn.addEventListener('click', () => {
+    conversionHistory = [];
+    chrome.storage.local.set({ conversionHistory: [] });
+    renderHistory();
   });
-  
+
+  exportTxtBtn.addEventListener('click', () => {
+    exportAsFile(outputText.value || inputText.value, 'txt');
+  });
+
+  exportJsonBtn.addEventListener('click', () => {
+    const data = {
+      original: inputText.value,
+      converted: outputText.value,
+      stats: {
+        characters: inputText.value.length,
+        words: inputText.value.trim() ? inputText.value.trim().split(/\s+/).length : 0,
+        lines: inputText.value.trim() ? inputText.value.split('\n').length : 0
+      },
+      timestamp: new Date().toISOString()
+    };
+    exportAsFile(JSON.stringify(data, null, 2), 'json');
+  });
+
+  function exportAsFile(content, format) {
+    if (!content) {
+      showMessage('No content to export');
+      return;
+    }
+    
+    try {
+      const blob = new Blob([content], { type: `text/${format}` });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `text-conversion-${new Date().toISOString().slice(0,10)}.${format}`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showMessage(`Exported as ${format.toUpperCase()}`);
+    } catch (err) {
+      console.error('Export failed:', err);
+      showMessage('Export failed');
+    }
+  }
+
+  function addToHistory(original, converted, method) {
+    if (!original || !converted) return;
+    
+    const isDuplicate = conversionHistory.some(item => 
+      item.original === original && 
+      item.converted === converted && 
+      item.method === method
+    );
+    
+    if (!isDuplicate) {
+      conversionHistory.unshift({
+        original,
+        converted, 
+        method,
+        timestamp: new Date().toISOString()
+      });
+      
+      if (conversionHistory.length > 5) {
+        conversionHistory.pop();
+      }
+      
+      chrome.storage.local.set({ conversionHistory });
+      renderHistory();
+    }
+  }
+
   themeToggle.addEventListener('click', () => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -84,6 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       await navigator.clipboard.writeText(outputText.value);
       showMessage('Copied!');
+      
+      const activeMethod = document.querySelector('.button-grid button.active')?.dataset.method || 'UPPER CASE';
+      addToHistory(inputText.value, outputText.value, activeMethod);
     } catch (err) {
       console.error('Failed to copy text: ', err);
       showMessage('Could not copy text to clipboard.');
@@ -101,9 +242,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const converter = conversionMethods[activeMethod];
       outputText.value = converter(text);
       copyBtn.disabled = false;
+      exportTxtBtn.disabled = false;
+      exportJsonBtn.disabled = false;
     } else {
       outputText.value = '';
       copyBtn.disabled = true;
+      exportTxtBtn.disabled = true;
+      exportJsonBtn.disabled = true;
     }
   }
   
@@ -126,22 +271,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const icon = themeToggle.querySelector('svg');
 
     if (theme === 'dark') {
-      icon.innerHTML = `
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-      `;
-      icon.style.stroke = '#ffffff'; 
+      icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      icon.style.stroke = '#ffffff';
     } else {
-      icon.innerHTML = `
-        <circle cx="12" cy="12" r="5"></circle>
-        <path d="M12 1v2"></path>
-        <path d="M12 21v2"></path>
-        <path d="M4.22 4.22l1.42 1.42"></path>
-        <path d="M18.36 18.36l1.42 1.42"></path>
-        <path d="M1 12h2"></path>
-        <path d="M21 12h2"></path>
-        <path d="M4.22 19.78l1.42-1.42"></path>
-        <path d="M18.36 5.64l1.42-1.42"></path>
-      `;
+      icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2"></path><path d="M12 21v2"></path><path d="M4.22 4.22l1.42 1.42"></path><path d="M18.36 18.36l1.42 1.42"></path><path d="M1 12h2"></path><path d="M21 12h2"></path><path d="M4.22 19.78l1.42-1.42"></path><path d="M18.36 5.64l1.42-1.42"></path>';
       icon.style.stroke = '';
     }
   }

@@ -201,3 +201,224 @@ button {
   font-weight: 600;
 }
 
+.button-grid button.favorite {
+  position: relative;
+  border-left: 3px solid gold;
+  padding-left: 8px;
+}
+
+.button-grid button.favorite::before {
+  content: '★';
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gold;
+  font-size: 12px;
+}
+
+.history-title-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.history-panel {
+  margin-top: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.history-header h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+#clearHistory {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+.history-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-item:hover {
+  background-color: var(--button-hover);
+}
+
+.history-method {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.history-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.info-tooltip {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: help;
+  color: var(--text-color);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.info-tooltip:hover {
+  opacity: 1;
+}
+
+.info-tooltip svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.info-tooltip .tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  z-index: 10;
+  margin-bottom: 0.5rem;
+}
+
+.info-tooltip:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+#clearHistory:hover {
+  background-color: var(--button-hover);
+}
+
+.export-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.export-buttons button {
+  flex: 1;
+  background-color: var(--button-bg);
+  color: var(--text-color);
+}
+
+.export-buttons button:hover {
+  background-color: var(--button-hover);
+}
+
+.tooltip-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.tooltip-button:hover {
+  background-color: var(--button-hover);
+}
+
+.tooltip-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  z-index: 10;
+  margin-bottom: 5px;
+}
+
+.tooltip-button:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.output-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  gap: 8px;
+}
+
+@media (max-width: 400px) {
+  .output-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .export-buttons {
+    justify-content: space-between;
+  }
+}

@@ -65,8 +65,46 @@
       <label for="outputText">Converted Text</label>
       <textarea id="outputText" readonly placeholder="Your converted text will appear here..."></textarea>
       <div class="output-actions">
-        <button id="copyBtn" disabled>Copy to clipboard</button>
+        <div class="export-buttons">
+          <button id="copyBtn" disabled class="tooltip-button">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/>
+            </svg>
+            <span>Copy</span>
+            <span class="tooltip">Copy to clipboard</span>
+          </button>
+          <button id="exportTxt" disabled class="tooltip-button">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M15,20H13V18H15V20M15,16H13V11H15V16M13,9V3.5L18.5,9H13Z"/>
+            </svg>
+            <span>TXT</span>
+            <span class="tooltip">Export as text file</span>
+          </button>
+          <button id="exportJson" disabled class="tooltip-button">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M7,5A2,2 0 0,0 5,7A2,2 0 0,0 7,9A2,2 0 0,0 9,7A2,2 0 0,0 7,5M17,15A2,2 0 0,0 15,17A2,2 0 0,0 17,19A2,2 0 0,0 19,17A2,2 0 0,0 17,15M17,5A2,2 0 0,0 15,7A2,2 0 0,0 17,9A2,2 0 0,0 19,7A2,2 0 0,0 17,5M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10M7,15A2,2 0 0,0 5,17A2,2 0 0,0 7,19A2,2 0 0,0 9,17A2,2 0 0,0 7,15Z"/>
+            </svg>
+            <span>JSON</span>
+            <span class="tooltip">Export as JSON file</span>
+          </button>
+        </div>
       </div>
+    </div>
+
+    <div class="history-panel">
+      <div class="history-header">
+        <div class="history-title-container">
+          <h3>Recent Conversions</h3>
+          <button class="info-tooltip" aria-label="History information">
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"/>
+            </svg>
+            <span class="tooltip">Saved when copying</span>
+          </button>
+        </div>
+        <button id="clearHistory">Clear</button>
+      </div>
+      <div id="historyItems"></div>
     </div>
     
     <div class="footer">
