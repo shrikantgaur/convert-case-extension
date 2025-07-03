@@ -28,3 +28,6 @@ A powerful text transformation tool that converts between 10+ case styles instan
 ```bash
 git clone https://github.com/shrikantgaur/convert-case-extension.git
 cd convert-case-extension
+
+## 📜 License
+[MIT License](LICENSE) © [Shrikant Gaur](https://github.com/shrikantgaur)
