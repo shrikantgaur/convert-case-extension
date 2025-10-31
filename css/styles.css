@@ -1,27 +1,31 @@
 :root {
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
-  --bg-color: #f9fafb;
-  --text-color: #111827;
-  --border-color: #d1d5db;
-  --button-bg: #e5e7eb;
-  --button-hover: #d1d5db;
-  --disabled-bg: #f3f4f6;
-  --disabled-text: #9ca3af;
-  --stats-bg: #edf2f7;
-  --stats-text: #4a5568;
+  --primary-color: #1C74A4;
+  --primary-hover: #155f85;
+  
+  --bg-color: #f4f7fb;
+  --text-color: #1e2a38;
+  --border-color: #d0d7df;
+  --button-bg: #e0e7ed;
+  --button-hover: #cfd9e2;
+  --disabled-bg: #f0f3f6;
+  --disabled-text: #9aa3ad;
+  --stats-bg: #e4edf7;
+  --stats-text: #2e3e50;
 }
 
 [data-theme="dark"] {
-  --bg-color: #111827;
-  --text-color: #f9fafb;
-  --border-color: #374151;
-  --button-bg: #1f2937;
-  --button-hover: #374151;
-  --disabled-bg: #1f2937;
-  --disabled-text: #6b7280;
-  --stats-bg: #1f2937;
-  --stats-text: #d1d5db;
+  --primary-color: #1C74A4;
+  --primary-hover: #155f85;
+
+  --bg-color: #0f1724;
+  --text-color: #f4f7fb;
+  --border-color: #1f2a3b;
+  --button-bg: #1a2b40;
+  --button-hover: #223552;
+  --disabled-bg: #1a2b40;
+  --disabled-text: #6b7a8f;
+  --stats-bg: #1a2b40;
+  --stats-text: #d1dbe8;
 }
 
 * {
@@ -34,7 +38,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
-  min-width: 400px;
+  min-width: 800px;
   padding: 1rem;
 }
 
@@ -51,6 +55,7 @@ body {
 }
 
 h1 {
+  color: var(--primary-color);
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
@@ -66,6 +71,19 @@ h1 {
 
 .theme-toggle:hover {
   background-color: var(--button-hover);
+}
+
+.input-outpul-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.input-group, .output-group {
+    width: 100%;
+}
+
+.conversion-types label {
+  padding-top: 10px;
 }
 
 label {
@@ -111,7 +129,7 @@ button {
 
 .button-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
   margin-top: 0.5rem;
 }
@@ -137,15 +155,32 @@ button {
   cursor: not-allowed;
 }
 
-#copyBtn:not(:disabled):hover {
-  background-color: var(--primary-hover);
+#clearBtn:not(:disabled):hover,
+#pasteBtn:not(:disabled):hover,
+#copyBtn:not(:disabled):hover,
+#exportTxt:not(:disabled):hover,
+#exportJson:not(:disabled):hover {
+  color: var(--primary-hover); /* darker hover tone */
+  background-color: rgba(37, 99, 235, 0.1); /* light tint background */
+  border-radius: 0.25rem;
 }
 
-#clearBtn, #pasteBtn {
+#clearBtn, #pasteBtn, #copyBtn, #exportTxt, #exportJson {
   background: none;
+  border: none;
   color: var(--primary-color);
-  text-decoration: underline;
-  padding: 0;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+#copyBtn:disabled,
+#exportTxt:disabled,
+#exportJson:disabled {
+  color: var(--disabled-text);
+  cursor: not-allowed;
+  background: none;
 }
 
 .message {

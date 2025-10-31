@@ -45,12 +45,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderConversionButtons(activeMethod) {
     conversionButtons.innerHTML = '';
-    
+
+    const icons = {
+      'UPPER CASE': 'fa-solid fa-arrow-up-a-z',
+      'lower case': 'fa-solid fa-arrow-down-a-z',
+      'Title Case': 'fa-solid fa-text-height',
+      'Sentence case': 'fa-solid fa-paragraph',
+      'camelCase': 'fa-solid fa-code',
+      'PascalCase': 'fa-solid fa-code-branch',
+      'snake_case': 'fa-solid fa-ellipsis',
+      'kebab-case': 'fa-solid fa-grip-lines',
+      'iNvErSe CaSe': 'fa-solid fa-exchange-alt',
+      'RaNdOm CaSe': 'fa-solid fa-shuffle'
+    };
+
     Object.keys(conversionMethods).forEach(method => {
       const button = document.createElement('button');
-      button.textContent = method;
       button.dataset.method = method;
-      
+      button.innerHTML = `<i class="${icons[method]}"></i> ${method}`;
+
       if (method === activeMethod) {
         button.classList.add('active');
       }
@@ -104,8 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         const hasText = item.converted.trim().length > 0;
-        exportTxtBtn.disabled = !hasText;
-        exportJsonBtn.disabled = !hasText;
+        // exportTxtBtn.disabled = !hasText;
+        // exportJsonBtn.disabled = !hasText;
       });
       
       historyItems.appendChild(historyItem);
@@ -200,6 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
     inputText.value = '';
     outputText.value = '';
     copyBtn.disabled = true;
+    exportTxtBtn.disabled = true;
+    exportJsonBtn.disabled = true;
     updateStats('');
     chrome.storage.local.set({ inputText: '' });
     inputText.focus();
@@ -267,15 +282,17 @@ document.addEventListener('DOMContentLoaded', () => {
   
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    
-    const icon = themeToggle.querySelector('svg');
+
+    const icon = themeToggle.querySelector('i');
 
     if (theme === 'dark') {
-      icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-      icon.style.stroke = '#ffffff';
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+      icon.style.color = '#ffffff';
     } else {
-      icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2"></path><path d="M12 21v2"></path><path d="M4.22 4.22l1.42 1.42"></path><path d="M18.36 18.36l1.42 1.42"></path><path d="M1 12h2"></path><path d="M21 12h2"></path><path d="M4.22 19.78l1.42-1.42"></path><path d="M18.36 5.64l1.42-1.42"></path>';
-      icon.style.stroke = '';
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+      icon.style.color = '#1C74A4';
     }
   }
   
